@@ -5,7 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var api = require('./controllers/api')
 var sockets = require('./controllers/Socket');
+var index = require('./controllers/Index');
 
 var config = require('./config/config')
 
@@ -19,20 +21,25 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set routes
-app.get('/', function(req, res){
-  console.log('hi');
-  res.send('index');
+app.get('/', function(req, res, next){
+  index.run(req, res, next);
 });
-app.get('/sockets', function(req, res, next){
-  sockets.run(req, res, next);
+app.get('/api/sockets', function(req, res, next){
+  api.sockets.get(req, res, next);
 });
-app.get('/sockets/add', function(req, res, next){
-  sockets.add(req, res, next);
+app.get('/api/sockets/:id(\\d+)', function(req, res, next){
+  api.sockets.show(req, res, next);
+});
+app.post('/api/sockets', function(req, res, next){
+  api.sockets.store(req, res, next);
+});
+app.put('/api/sockets/:id(\\d+)', function(req, res, next){
+  api.sockets.update(req, res, next);
 });
 // app.use('/sockets', sockets.run);
 

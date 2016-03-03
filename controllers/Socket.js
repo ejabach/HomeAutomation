@@ -1,11 +1,14 @@
 var BaseController = require("./Base");
+var View = require("../views/Base");
 //var SocketsModel = require('/models/Sockets');
+
 
 module.exports = BaseController.extend({
 	name: "Sockets",
 	run: function(req, res, next){
-		console.log('sockets list');
-		var v = new View(res, 'Socket');		
+		console.log('sockets run');
+		var v = new View(res, 'sockets');
+                console.log(v);
 		v.render({
 			title: 'Sockets',
 			content: 'this will be a db object later'
