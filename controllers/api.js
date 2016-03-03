@@ -21,6 +21,7 @@ module.exports.sockets = BaseController.extend({
 	get: function(req, res){
             console.log('GET request received: ', req.params);
             console.log('Return all Sockets');
+            console.log('DB instance: ', req.db.collection);
             res.send(sockets);
 	},
         show: function(req, res){

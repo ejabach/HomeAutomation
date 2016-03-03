@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
 
 var api = require('./controllers/api')
 var sockets = require('./controllers/Socket');
@@ -25,23 +27,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Set routes
-app.get('/', function(req, res, next){
-  index.run(req, res, next);
+MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
+    if(err) {
+        console.log('Sorry, there is no mongo db server running.');
+    } else {
+        console.log('Successfully connected to DB');
+        
+        var attachDB = function(req, res, next) {
+            req.db = db;
+            next();
+        };
+        
+        //Set routes
+        app.get('/', function(req, res, next){
+          index.run(req, res, next);
+        });
+        app.get('/api/sockets', attachDB, function(req, res, next){
+          api.sockets.get(req, res, next);
+        });
+        app.get('/api/sockets/:id(\\d+)', attachDB, function(req, res, next){
+          api.sockets.show(req, res, next);
+        });
+        app.post('/api/sockets', attachDB, function(req, res, next){
+          api.sockets.store(req, res, next);
+        });
+        app.put('/api/sockets/:id(\\d+)', attachDB, function(req, res, next){
+          api.sockets.update(req, res, next);
+        });
+        // app.use('/sockets', sockets.run);
+    }
 });
-app.get('/api/sockets', function(req, res, next){
-  api.sockets.get(req, res, next);
-});
-app.get('/api/sockets/:id(\\d+)', function(req, res, next){
-  api.sockets.show(req, res, next);
-});
-app.post('/api/sockets', function(req, res, next){
-  api.sockets.store(req, res, next);
-});
-app.put('/api/sockets/:id(\\d+)', function(req, res, next){
-  api.sockets.update(req, res, next);
-});
-// app.use('/sockets', sockets.run);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
