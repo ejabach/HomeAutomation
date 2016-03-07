@@ -1,17 +1,19 @@
-var BaseController = require("./Base");
-var Socket = require('../models/Socket');
+var BaseController = require("../Base");
+var Socket = require('../../models/Socket');
 
 /**
  * Handles all sockets requests 
  */
-module.exports.sockets = BaseController.extend({
+module.exports = BaseController.extend({
 	get: function(req, res){
             console.log('GET request received: ', req.params);
             console.log('Return all Sockets');
             console.log('The Socket entity: ', Socket);
             Socket.find(function(err, sockets){
                 if (!err) {
-                    res.send(sockets);
+                    res.json(sockets);
+                } else {
+                    res.sendStatus(500);
                 }
             });
 	},

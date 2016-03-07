@@ -4,21 +4,24 @@ var config = {
         port: 3000,
         mongo:{
             host: 'localhost'
-        }
+        },
+        secret: 'supersecret'
     },
     staging: {
         mode: 'staging',
         port: 4000,
         mongo:{
             host: 'localhost'
-        }
+        },
+        secret: 'supersecret'
     },
     production: {
         mode: 'production',
         port: 5000,
         mongo:{
             host: 'localhost'
-        }
+        },
+        secret: 'supersecret'
     }
 }
 
