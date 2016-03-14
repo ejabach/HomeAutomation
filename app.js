@@ -7,12 +7,11 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var assert = require('assert');
 
-var jwauth = require('./libraries/jwtauth');
+var authentication = require('./libraries/jwtauth');
 var api = require('./controllers/api/API')
 var sockets = require('./controllers/Socket');
 var index = require('./controllers/Index');
-
-var config = require('./config/config')
+var config = require('./config/config');
 
 var app = express();
 
@@ -29,16 +28,38 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set routes
+//Require authentication if not running in development mode
+if (app.get('env') !== 'development') {
+    console.log('Not running in development environment.');
+    app.all('/api/*', authentication);
+}
+/********************
+ *       API        *
+ ********************
+ * /api/
+ *  /user/
+ *      /auth
+ *          POST - Handout JSON Web Token if given user data is correct
+ *      /create
+ *          POST - Create a new user
+ *  
+*/
 app.post('/api/user/auth', function(req, res, next){
   api.users.auth(req, res, next);
 });
 app.post('/api/user/create', function(req, res, next){
   api.users.create(req, res, next);
 });
-app.all('/api/*', jwauth);
-app.get('/', function(req, res, next){
-  index.run(req, res, next);
-});
+/*
+ *  /sockets/
+ *      GET - Returns list of all known sockets
+ *      POST - Saves a new socket
+ *            
+ *     /:name
+ *          GET - Returns specific socket given by :name
+ *     /:name/switch
+ *          GET - Switches the socket given by :name
+ */
 app.get('/api/sockets' , function(req, res, next){
   api.sockets.get(req, res, next);
 });
@@ -54,7 +75,6 @@ app.post('/api/sockets' , function(req, res, next){
 app.put('/api/sockets/:id(\\d+)', function(req, res, next){
   api.sockets.update(req, res, next);
 });
-// app.use('/sockets', sockets.run);
 
 
 // catch 404 and forward to error handler

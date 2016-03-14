@@ -20,11 +20,11 @@ module.exports = function(req, res, next){
             }
         });
       } catch (err) {
-          console.error(err);
+        console.error(err);
         res.sendStatus(403);
       }
     } else {
-        console.log('token not set');
+      console.log('token not set');
       res.sendStatus(403);
     }
 };
