@@ -8,10 +8,12 @@ var mongoose = require('mongoose');
 var assert = require('assert');
 
 var authentication = require('./libraries/jwtauth');
-var api = require('./controllers/api/API')
-var sockets = require('./controllers/Socket');
-var index = require('./controllers/Index');
+var authorization = require('./libraries/authorization');
+var api = require('./controllers/api/API');
 var config = require('./config/config');
+var index = require('./controllers/Index');
+var sockets = require('./controllers/Socket');
+var web = require('./controllers/Web');
 
 var app = express();
 
@@ -27,12 +29,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Set routes
+
 //Require authentication if not running in development mode
 if (app.get('env') !== 'development') {
     console.log('Not running in development environment.');
     app.all('/api/*', authentication);
+} else {
+    console.log('Running in development environment.');
+    app.use(function(req, res, next){
+        console.log('Setting user');
+        req.user = {username: "testuser",
+            password:"",
+            admin: true,
+            isAdmin: function(){
+                return this.admin;
+            }
+        }
+        next();
+    });
 }
+
 /********************
  *       API        *
  ********************
@@ -47,7 +63,15 @@ if (app.get('env') !== 'development') {
 app.post('/api/user/auth', function(req, res, next){
   api.users.auth(req, res, next);
 });
-app.post('/api/user/create', function(req, res, next){
+app.post('/api/user/create', 
+//function(req, res, next){
+//    req.user={
+//        admin:true,
+//        isAdmin: function(){return true}
+//    };
+//    next();
+//},
+authorization('create-user'), function(req, res, next){
   api.users.create(req, res, next);
 });
 /*
@@ -75,6 +99,18 @@ app.post('/api/sockets' , function(req, res, next){
 app.put('/api/sockets/:id(\\d+)', function(req, res, next){
   api.sockets.update(req, res, next);
 });
+/********************
+ *       WEB        *
+ ********************/
+app.get('/', function(req, res, next){
+    web.index.show(req, res, next);
+});
+app.get('/login', function(req, res, next){
+    web.login.show(req, res, next);
+})
+app.post('/login', function(req, res, next){
+    web.login.attempt(req, res, next);
+})
 
 
 // catch 404 and forward to error handler

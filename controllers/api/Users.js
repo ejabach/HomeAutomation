@@ -25,7 +25,9 @@ module.exports = BaseController.extend({
             res.json({
               token : token,
               expires: expires,
-              user: user.toJSON()
+              user: { username: user.username,
+                  admin: user.admin
+              }
             });
         });
     },

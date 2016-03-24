@@ -4,7 +4,6 @@ var db = BaseModel.db;
 
 function setPassword(password){
     console.log('setPassword() called');
-    //wrong this object ???
     var pw = bcrypt.hashSync(password);
     return pw;
 }
@@ -16,6 +15,10 @@ var userSchema = db.Schema({
 userSchema.methods.validatePassword = function(password){
     console.log('ValidatePW() called');
     return bcrypt.compareSync(password, this.password);
+}
+userSchema.methods.isAdmin = function(){
+    console.log('isAdmin() called');
+    return this.admin;
 }
 var User = db.connection.model('User', userSchema);
 
