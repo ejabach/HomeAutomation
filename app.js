@@ -60,18 +60,13 @@ if (app.get('env') !== 'development') {
  *          POST - Create a new user
  *  
 */
+app.get('/api/user', function(req, res, next){
+   api.users.show(req, res, next); 
+});
 app.post('/api/user/auth', function(req, res, next){
   api.users.auth(req, res, next);
 });
-app.post('/api/user/create', 
-//function(req, res, next){
-//    req.user={
-//        admin:true,
-//        isAdmin: function(){return true}
-//    };
-//    next();
-//},
-authorization('create-user'), function(req, res, next){
+app.post('/api/user/create', authorization('create-user'), function(req, res, next){
   api.users.create(req, res, next);
 });
 /*
@@ -84,7 +79,7 @@ authorization('create-user'), function(req, res, next){
  *     /:name/switch
  *          GET - Switches the socket given by :name
  */
-app.get('/api/sockets' , function(req, res, next){
+app.get('/api/sockets', function(req, res, next){
   api.sockets.get(req, res, next);
 });
 app.get('/api/sockets/:name', function(req, res, next){
