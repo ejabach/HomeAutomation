@@ -16,19 +16,8 @@ module.exports = BaseController.extend({
                 console.log('validatePassword(): ', user.validatePassword(req.body.password));
                 res.sendStatus(401);
             }
-            var expires = moment().add('days', 1).valueOf();
-            var token = jwt.encode({
-              iss: user._id,
-              exp: expires
-            }, config().secret);
-
-            res.json({
-              token : token,
-              expires: expires,
-              user: { username: user.username,
-                  admin: user.admin
-              }
-            });
+            var token = user.createToken();            
+            res.json(token);
         });
     },
     create: function(req, res) {
@@ -47,6 +36,21 @@ module.exports = BaseController.extend({
                 console.error(err);
                 res.sendStatus(500);
             }
+        });
+    },
+    show: function(req, res) {
+        console.log('Show all users request.');
+        User.find(function(err, users){
+            if (err) res.sendStatus(404);
+            var arr = [];
+            for (var i = 0; i < users.length; i++){
+                var user = users[i];
+                arr.push({
+                    _id: user._id,
+                    username: user.username
+                });
+            }
+            res.json(arr);
         });
     }
 });

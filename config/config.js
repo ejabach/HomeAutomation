@@ -5,7 +5,7 @@ var config = {
         mongo:{
             host: 'localhost'
         },
-        secret: 'supersecret'
+        secret: 'supersecret'        
     },
     staging: {
         mode: 'staging',

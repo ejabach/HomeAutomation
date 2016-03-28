@@ -102,10 +102,13 @@ app.get('/', function(req, res, next){
 });
 app.get('/login', function(req, res, next){
     web.login.show(req, res, next);
-})
+});
 app.post('/login', function(req, res, next){
     web.login.attempt(req, res, next);
-})
+});
+app.get('/sockets', authentication, function(req, res, next){
+    web.socket.show(req, res, next);
+});
 
 
 // catch 404 and forward to error handler
