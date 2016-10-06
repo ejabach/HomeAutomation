@@ -14,10 +14,10 @@ module.exports = BaseController.extend({
 			content: 'this will be a db object later'
 		});	
 	},
-        show: function(req, res){
-            console.log('Show sockets called');
-            res.sendStatus(200);
-        },
+	show: function(req, res){
+		console.log('Show sockets called');
+		res.sendStatus(200);
+	},
 	add: function(req, res, next){
 		console.log('new socket should be added');
 		var v = new View(res, 'AddSocket');
@@ -25,10 +25,5 @@ module.exports = BaseController.extend({
 	},
 	store: function(req, res, next){
 		console.log('save socket');		
-	},
-	delete: function(req, res, next){
-		console.log('new socket should be deleted');
-		//remove from db
 	}
-
 });

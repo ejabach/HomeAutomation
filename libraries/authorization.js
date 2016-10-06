@@ -9,20 +9,12 @@ module.exports = function(action){
         console.log('auth request with user '+user+' and action '+action);
         if (action && user){
             console.log('action and user set');
-            switch(action){
-                case 'create-user':
-                    console.log('action is create-user');
-                    if (user.isAdmin()){
-                        console.log('user is admin');
-                        next();
-                    } else {
-                        console.log('user is not admin');
-                        res.sendStatus(401);
-                    };
-                    break;
-                default:
-                    console.log('default case reached');
-                    res.sendStatus(401);
+            if (authorize(user, action)) {
+                console.log('user is authorized');
+                next();
+            } else {
+                console.log('user is not authorized');
+                res.sendStatus(401);
             }
         } else {
             console.log('user or action not set');
@@ -30,3 +22,20 @@ module.exports = function(action){
         }
     }
 };
+
+/**
+ * Helper function
+ */
+function authorize(user, action) {
+    console.log('User \'' + user.name + '\' asks for permission to \'' + action + '\'');
+    switch(action) {
+        /*
+         * Add authorization logic here!
+         */
+        case 'create-user':
+            return user.isAdmin();
+            break;
+        default:
+            return false;
+    }
+}

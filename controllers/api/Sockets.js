@@ -30,14 +30,14 @@ module.exports = BaseController.extend({
                }
             });            
         },
-        switch: function(req, res){
+        toggle: function(req, res){
             console.log('GET request received: ', req.params);
             console.log('Switch status of socket ', req.params.name);
             var name = req.params.name;
             Socket.findOne({ name: name }, function(err, socket){
-               if (!err) {
+               if (!err && socket) {
                    console.log('Socket found.');
-                   socket.switch(function(err){
+                   socket.toggle(function(err){
                        if (!err) {
                            console.log('Successfully switched socket.')
                            socket.save();

@@ -1,22 +1,33 @@
 var BaseModel = require("./Base");
+const exec = require('child_process').exec;
 var db = BaseModel.db;
 
 var socketSchema = db.Schema({
     name: String,
-    status: Boolean
+    status: Boolean,
+    numbering: String
 });
+
 socketSchema.methods.turnOn = function(callback){
-    console.log('Switch socket ' + this.name + ' from status ' + this.status);
-    this. status = true;
-    console.log('to status ' + this.status);
-    callback();
+    toggle(this, true, callback);
 };
 socketSchema.methods.turnOff = function(callback){
-    console.log('Switch socket ' + this.name + ' from status ' + this.status);
-    this. status = false;
-    console.log('to status ' + this.status);
-    callback();
+    toggle(this, false, callback);
 };
+
+function toggle(socket, status, callback) {
+    var command = './send ' + socket.numbering + ' 1 ' + status;
+    exec(command, function (error, stdout, stderr) {
+        if (error) {
+            console.error('exec error: ' + error);
+            return;
+        }
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+    });
+    socket.status = status;
+    callback();
+}
 
 var Socket = db.connection.model('Socket', socketSchema);
 

@@ -58,42 +58,54 @@ if (app.get('env') !== 'development') {
  *          POST - Handout JSON Web Token if given user data is correct
  *      /create
  *          POST - Create a new user
- *  
-*/
+ *
+ */
 app.get('/api/user', function(req, res, next){
-   api.users.show(req, res, next); 
+    api.users.show(req, res, next);
 });
 app.post('/api/user/auth', function(req, res, next){
-  api.users.auth(req, res, next);
+    api.users.auth(req, res, next);
 });
 app.post('/api/user/create', authorization('create-user'), function(req, res, next){
-  api.users.create(req, res, next);
+    api.users.create(req, res, next);
 });
 /*
  *  /sockets/
  *      GET - Returns list of all known sockets
  *      POST - Saves a new socket
- *            
+ *
  *     /:name
  *          GET - Returns specific socket given by :name
- *     /:name/switch
+ *     /:name/toggle
  *          GET - Switches the socket given by :name
  */
 app.get('/api/sockets', function(req, res, next){
-  api.sockets.get(req, res, next);
+    api.sockets.get(req, res, next);
 });
 app.get('/api/sockets/:name', function(req, res, next){
-  api.sockets.show(req, res, next);
+    api.sockets.show(req, res, next);
 });
-app.get('/api/sockets/:name/switch', function(req, res, next){
-  api.sockets.switch(req, res, next);
+app.get('/api/sockets/:name/turnOn', function(req, res, next){
+    api.sockets.turnOn(req, res, next);
+});
+app.get('/api/sockets/:name/turnOff', function(req, res, next){
+    if (app.get('env') != 'development') {
+        api.sockets.turnOff(req, res, next);
+    } else {
+        console.log('Can\'t access sockets in development environment');
+    }
 });
 app.post('/api/sockets' , function(req, res, next){
-  api.sockets.store(req, res, next);
+    if (app.get('env') == 'development') {
+        api.sockets.store(req, res, next);
+    } else {
+        console.log('Can\'t access sockets in development environment');
+    }
 });
 app.put('/api/sockets/:id(\\d+)', function(req, res, next){
-  api.sockets.update(req, res, next);
+    api.sockets.update(req, res, next);
 });
+
 /********************
  *       WEB        *
  ********************/
@@ -106,6 +118,12 @@ app.get('/login', function(req, res, next){
 app.post('/login', function(req, res, next){
     web.login.attempt(req, res, next);
 });
+app.get('/settings/users', function(req, res, next) {
+    web.settings.show(req, res, next);
+});
+app.post('/settings/users', function(req, res, next) {
+    api.users.create(req, res, next);
+});
 app.get('/sockets', authentication, function(req, res, next){
     web.socket.show(req, res, next);
 });
@@ -113,9 +131,9 @@ app.get('/sockets', authentication, function(req, res, next){
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -123,23 +141,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
     });
-  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 module.exports = app;
