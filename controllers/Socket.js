@@ -1,5 +1,6 @@
-var BaseController = require("./Base");
-var View = require("../views/Base");
+var BaseController 	= require("./Base");
+var View 			= require("../views/Base");
+var Sockets 		= require('/models/Socket');
 //var SocketsModel = require('/models/Sockets');
 
 
@@ -16,6 +17,12 @@ module.exports = BaseController.extend({
 	},
 	show: function(req, res){
 		console.log('Show sockets called');
+		var v = new View(res, 'sockets');
+		Sockets.find({}, function(err, sockets){
+			if (!err) {
+				v.render(sockets);
+			}
+		});
 		res.sendStatus(200);
 	},
 	add: function(req, res, next){

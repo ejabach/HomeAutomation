@@ -6,11 +6,16 @@ var View = require("../views/Base");
 module.exports = BaseController.extend({
 	name: "Login",
 	show: function(req, res){
+	    if (!req.user) {
             var v = new View(res, 'login');
             v.render({
-                    title: 'Welcome ',
-                    content: req.user
-            });	
+                title: 'Welcome ',
+                content: req.user
+            });
+        } else {
+            console.log('User already logged in, redirecting to profile...');
+            res.redirect('./profile');
+        }
 	},
     attempt: function(req, res, next){
         var username = req.body.username;
