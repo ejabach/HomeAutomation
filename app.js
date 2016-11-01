@@ -11,7 +11,6 @@ var authentication = require('./libraries/jwtauth');
 var authorization = require('./libraries/authorization');
 var api = require('./controllers/api/API');
 var config = require('./config/config');
-var index = require('./controllers/Index');
 var sockets = require('./controllers/Socket');
 var web = require('./controllers/Web');
 
@@ -96,11 +95,7 @@ app.get('/api/sockets/:name/turnOff', function(req, res, next){
     }
 });
 app.post('/api/sockets' , function(req, res, next){
-    if (app.get('env') == 'development') {
-        api.sockets.store(req, res, next);
-    } else {
-        console.log('Can\'t access sockets in development environment');
-    }
+    api.sockets.store(req, res, next);
 });
 app.put('/api/sockets/:id(\\d+)', function(req, res, next){
     api.sockets.update(req, res, next);

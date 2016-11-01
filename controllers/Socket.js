@@ -1,8 +1,6 @@
 var BaseController 	= require("./Base");
 var View 			= require("../views/Base");
-var Sockets 		= require('/models/Socket');
-//var SocketsModel = require('/models/Sockets');
-
+var Sockets 		= require('../models/Socket');
 
 module.exports = BaseController.extend({
 	name: "Sockets",
@@ -31,6 +29,18 @@ module.exports = BaseController.extend({
 		v.render();
 	},
 	store: function(req, res, next){
-		console.log('save socket');		
+		console.log('Save socket');
+		if (req.name && req.numbering) {
+			console.log('\tname: %s\n\tnumbering: %s', req.name, req.numbering);
+			var socket = new Sockets({
+				name: req.name,
+				status: false,
+				numbering: req.numbering
+			});
+			socket.save();
+			res.json(socket);
+		}
+		console.log('Missing params');
+		res.sendStatus(500);
 	}
 });

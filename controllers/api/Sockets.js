@@ -69,19 +69,26 @@ module.exports = BaseController.extend({
     store: function(req, res){
         console.log('POST request received: ', req.body);
         console.log('Store socket with given data.');
-        console.log('Socket model: ', Socket);
         var name = req.body.name;
+        var numbering = req.body.numbering;
         var status = false;
-        var socket = new Socket({name: name, status: status});
-        socket.save(function(err, socket){
-            if (!err) {
-                console.log('Successfully created Socket!');
-                res.sendStatus(200);
-            } else {
-                console.error(err);
-            }
-        })
-        socket.turnOn();
+
+        if(name && numbering) {
+            var socket = new Socket({name: name, numbering: numbering, status: status});
+
+            socket.save(function (err, socket) {
+                if (!err) {
+                    console.log('Successfully created Socket!');
+                    res.sendStatus(200);
+                } else {
+                    console.error(err);
+                    res.sendStatus(500);
+                }
+            })
+        } else {
+            console.log('name or numbering not set correctly:\n\tname: %s,\n\tnumbering: %s', name, numbering);
+            res.sendStatus(500);
+        }
     },
     update: function(req, res){
         console.log('PUT request received: ', req.body);

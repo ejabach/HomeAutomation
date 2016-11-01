@@ -1,9 +1,18 @@
 extends layout
 
 block content
-  h1 #{title} #{content.username}
-  p Welcome to #{title}
-
+  h1 Welcome to #{title} #{content.username}
   div
-    each socket in params.sockets
-      p socket.name
+    h2 Sockets
+    table
+      thead
+        tr
+          th Name
+          th Numbering
+          th Status
+      tbody
+        each socket in params.sockets
+          tr
+            td #{socket.name}
+            td #{socket.numbering}
+            td #{socket.status}

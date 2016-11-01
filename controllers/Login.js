@@ -32,6 +32,11 @@ module.exports = BaseController.extend({
                 res.sendStatus(500);
                 return;
             }
+            if (!usr.validatePassword(password)) {
+                console.log('Password incorrect');
+                res.sendStatus(401);
+                return;
+            }
             console.log('Found user:\n\tname: ' + usr.username + '\n\tadmin: ' + usr.isAdmin());
             var token = usr.createToken();
             if (token) {
@@ -41,6 +46,7 @@ module.exports = BaseController.extend({
                     expires: new Date(Date.now() + 24*60*60*1000)
                 });
                 res.sendStatus(200);
+                res.redirect('/');
             };
         });
     }
