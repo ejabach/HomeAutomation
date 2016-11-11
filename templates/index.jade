@@ -2,17 +2,12 @@ extends layout
 
 block content
   h1 Welcome to #{title} #{content.username}
-  div
-    h2 Sockets
-    table
-      thead
-        tr
-          th Name
-          th Numbering
-          th Status
-      tbody
-        each socket in params.sockets
-          tr
-            td #{socket.name}
-            td #{socket.numbering}
-            td #{socket.status}
+  h5 Sockets
+    div(class='row')
+      each socket in params.sockets
+        div(class='col s4')
+          div(class='card')
+            div(class='card-content')
+              span(class='card-title') #{socket.name}
+              p Code: #{socket.numbering}
+              p Last modified: today

@@ -6,7 +6,9 @@ module.exports = BaseController.extend({
 	name: "Index",
 	show: function(req, res, next){
 		var v = new View(res, 'index');
-		var params = {};
+		var params = {
+			user: req.user
+		};
 
 		// Create several 'widgets' for each kind of item on dashboard
 		// Then display one after the other (async?)!
