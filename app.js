@@ -37,7 +37,8 @@ if (app.get('env') !== 'development') {
     console.log('Running in development environment.');
     app.use(function(req, res, next){
         console.log('Setting user');
-        req.user = {username: "testuser",
+        req.user = {
+            username: "testuser",
             password:"",
             admin: true,
             isAdmin: function(){
@@ -100,6 +101,16 @@ app.post('/api/sockets' , function(req, res, next){
 app.put('/api/sockets/:id(\\d+)', function(req, res, next){
     api.sockets.update(req, res, next);
 });
+
+/*
+    DEBUG routes
+ */
+if (app.get('env') === 'development') {
+    app.get('/api/seeder/sockets', function(req, res, next) {
+        api.seeder.sockets();
+        res.sendStatus(100);
+    })
+}
 
 /********************
  *       WEB        *
