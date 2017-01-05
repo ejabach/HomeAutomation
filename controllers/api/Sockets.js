@@ -52,7 +52,7 @@ module.exports = BaseController.extend({
                 console.log('Socket found.');
                 socket.toggle(function(err){
                     if (!err) {
-                        console.log('Successfully switched socket.')
+                        console.log('Successfully switched socket.');
                         socket.save();
                         res.sendStatus(200);
                     } else {
@@ -79,7 +79,7 @@ module.exports = BaseController.extend({
             socket.save(function (err, socket) {
                 if (!err) {
                     console.log('Successfully created Socket!');
-                    res.sendStatus(200);
+                    res.json(socket);
                 } else {
                     console.error(err);
                     res.sendStatus(500);
@@ -93,14 +93,17 @@ module.exports = BaseController.extend({
     update: function(req, res){
         console.log('PUT request received: ', req.body);
         console.log('For Socket ID: ', req.params.id);
-        var id = req.params.id;
-        var socket = findSocket(id);
-        if (!socket){
-            console.log('No socket found with given ID!');
-            res.sendStatus(404);
-        } else {
-            console.log('Update Socket: ', socket)
-            res.sendStatus(200);
-        }
+        var socket = new Socket({name: req.params.name,
+            status: false,
+            numbering: req.params.numbering});
+        Socket.findOneAndUpdate({id: req.params.id}, socket, {upsert: true}, function (err, doc) {
+            if (!err) {
+                console.log('Socket update successfully!');
+                res.json(socket);
+            } else {
+                console.log('Error occurred: %s', doc);
+                res.json({error: true, hint: doc});
+            }
+        });
     }
 });

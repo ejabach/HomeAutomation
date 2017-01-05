@@ -8,6 +8,13 @@ var socketSchema = db.Schema({
     numbering: String
 });
 
+socketSchema.methods.toggle = function (callback) {
+    if (this.status) {
+        toggle(this, false, callback);
+    } else {
+        toggle(this, true, callback);
+    }
+};
 socketSchema.methods.turnOn = function(callback){
     toggle(this, true, callback);
 };

@@ -1,9 +1,7 @@
 var Sockets = require('./Sockets');
-var Users = require('./Users');
+var Tasks   = require('./Tasks');
+var Users   = require('./Users');
 
-// DB Seeder
-var Seeder = require('./debug/Seeder')
-
-module.exports.sockets = Sockets;
-module.exports.users = Users;
-module.exports.seeder = Seeder;
+module.exports.sockets  = Sockets;
+module.exports.tasks    = Tasks;
+module.exports.users    = Users;

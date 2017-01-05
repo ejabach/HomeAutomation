@@ -1,0 +1,31 @@
+doctype html
+html()
+    head
+        title= title
+
+        link(rel='stylesheet' href='./stylesheets/angular-material.css')
+
+        script(src='./lib/angular.min.js')
+        script(src='./lib/angular-animate.js')
+        script(src='./lib/angular-aria.js')
+        script(src='./lib/angular-messages.js')
+        script(src='./lib/angular-material.js')
+        script(src='core.js')
+
+    body(ng-app='taskList' ng-controller="mainController")
+        div(ng-cloak)
+            div
+                md-content
+                    md-list(flex)
+                        md-subheader(class='md-no-sticky') There are {{tasks.length}} tasks.
+                        md-list-item(class='md-1-line' ng-repeat='task in tasks' ng-click='toggleTask(task)')
+                            p {{task.name}}
+                            md-checkbox(class='md-secondary'  ng-model='task.done' aria-label='Toggle {{task.name}}')
+
+
+
+        h4 There are {{tasks.length}} tasks.
+        div(class='container')
+            div(id='task-list' class='row')
+                div(ng-repeat='task in tasks')
+                    p {{task.name}}

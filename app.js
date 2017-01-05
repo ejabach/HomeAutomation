@@ -1,24 +1,22 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var assert = require('assert');
+var path            = require('path');
+var assert          = require('assert');
+var favicon         = require('serve-favicon');
+var logger          = require('morgan');
+var cookieParser    = require('cookie-parser');
+var bodyParser      = require('body-parser');
+var express         = require('express');
+var mongoose        = require('mongoose');
 
-var authentication = require('./libraries/jwtauth');
-var authorization = require('./libraries/authorization');
-var api = require('./controllers/api/API');
-var config = require('./config/config');
-var sockets = require('./controllers/Socket');
-var web = require('./controllers/Web');
+var api             = require('./controllers/api/API');
+var authentication  = require('./libraries/jwtauth');
+var authorization   = require('./libraries/authorization');
+var config          = require('./config/config');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, '/templates'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -37,14 +35,13 @@ if (app.get('env') !== 'development') {
     console.log('Running in development environment.');
     app.use(function(req, res, next){
         console.log('Setting user');
-        req.user = {
-            username: "testuser",
+        req.user = {username: "testuser",
             password:"",
             admin: true,
             isAdmin: function(){
                 return this.admin;
             }
-        }
+        };
         next();
     });
 }
@@ -85,12 +82,9 @@ app.get('/api/sockets', function(req, res, next){
 app.get('/api/sockets/:name', function(req, res, next){
     api.sockets.show(req, res, next);
 });
-app.get('/api/sockets/:name/turnOn', function(req, res, next){
-    api.sockets.turnOn(req, res, next);
-});
-app.get('/api/sockets/:name/turnOff', function(req, res, next){
+app.put('/api/sockets/:name/toggle', function (req, res, next) {
     if (app.get('env') != 'development') {
-        api.sockets.turnOff(req, res, next);
+        api.sockets.toggle(req, res, next);
     } else {
         console.log('Can\'t access sockets in development environment');
     }
@@ -103,37 +97,29 @@ app.put('/api/sockets/:id(\\d+)', function(req, res, next){
 });
 
 /*
-    DEBUG routes
+Task List
  */
-if (app.get('env') === 'development') {
-    app.get('/api/seeder/sockets', function(req, res, next) {
-        api.seeder.sockets();
-        res.sendStatus(100);
-    })
-}
-
-/********************
- *       WEB        *
- ********************/
-app.get('/', function(req, res, next){
-    web.index.show(req, res, next);
+app.get('/api/tasks', function(req, res, next) {
+    api.tasks.get(req, res, next);
 });
-app.get('/login', function(req, res, next){
-    web.login.show(req, res, next);
+app.post('/api/tasks', function (req, res, next) {
+    api.tasks.store(req, res, next);
 });
-app.post('/login', function(req, res, next){
-    web.login.attempt(req, res, next);
+app.get('/api/tasks/:id/toggle', function (req, res, next) {
+    api.tasks.toggle(req, res, next);
 });
-app.get('/settings/users', function(req, res, next) {
-    web.settings.show(req, res, next);
-});
-app.post('/settings/users', function(req, res, next) {
-    api.users.create(req, res, next);
-});
-app.get('/sockets', authentication, function(req, res, next){
-    web.socket.show(req, res, next);
+app.delete('/api/tasks/:id', function (req, res, next) {
+    api.tasks.delete(req, res, next);
 });
 
+/*
+Angular handles the frontend
+ */
+app.get('*', function (req, res) {
+    res.render('index', {
+        title: 'Dashboard'
+    });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -147,7 +133,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+    app.use(function(err, req, res) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -158,7 +144,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
