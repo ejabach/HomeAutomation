@@ -1,11 +1,11 @@
 /**
  * Created by Jan on 05.01.2017.
  */
-var taskList = angular.module('taskList', ['ngMaterial', 'ngAnimate', 'ngAria', 'ngMessages']);
+var homeAutomation = angular.module('homeAutomation', ['ngMaterial', 'ngAnimate', 'ngAria', 'ngMessages']);
 
 console.log('script opened');
 
-taskList.controller('mainController', ['$scope', '$http', function ($scope, $http) {
+homeAutomation.controller('mainController', ['$scope', '$http', function ($scope, $http) {
     $scope.formData = {};
     console.log('mainController called');
 
@@ -52,3 +52,45 @@ taskList.controller('mainController', ['$scope', '$http', function ($scope, $htt
     }
 }
 ]);
+
+homeAutomation.controller('navBarController', ['$scope', '$http', function ($scope, $http) {
+    function getUserName() {
+        return 'Jan';
+    }
+
+    $scope.sections = [
+        {
+            name: 'Dashboard',
+            type: 'link'
+        }, {
+            name: 'Rooms',
+            type: 'toggle',
+            children: [
+                {
+                    name: 'Living Room',
+                    state: 'home.living-room',
+                    type: 'link'
+                }, {
+                    name: 'Kitchen',
+                    type: 'link'
+                }
+            ]
+        }, {
+            name: getUserName(),
+            type: 'link',
+            icon: 'person'
+        }, {
+            name: 'Settings',
+            type: 'link',
+            icon: 'settings'
+        }
+    ];
+    console.log('navBarController called');
+    $scope.showDashboard = function () {
+        console.log('Show Dashboard');
+    };
+    
+    $scope.close = function () {
+        console.log("Close Navigation Drawer");
+    }
+}]);

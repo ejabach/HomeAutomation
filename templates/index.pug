@@ -4,6 +4,7 @@ html()
         title= title
 
         link(rel='stylesheet' href='./stylesheets/angular-material.css')
+        link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
 
         script(src='./lib/angular.min.js')
         script(src='./lib/angular-animate.js')
@@ -12,20 +13,35 @@ html()
         script(src='./lib/angular-material.js')
         script(src='core.js')
 
-    body(ng-app='taskList' ng-controller="mainController")
+    body(ng-app='homeAutomation')
         div(ng-cloak)
-            div
-                md-content
-                    md-list(flex)
-                        md-subheader(class='md-no-sticky') There are {{tasks.length}} tasks.
-                        md-list-item(class='md-1-line' ng-repeat='task in tasks' ng-click='toggleTask(task)')
-                            p {{task.name}}
-                            md-checkbox(class='md-secondary'  ng-model='task.done' aria-label='Toggle {{task.name}}')
+            section( layout="row" flex)
+                md-sidenav(class="site-sidenav md-sidenav-left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4")
+                    md-content(ng-controller="navBarController")
+                        md-toolbar(class='md-hue-2 md-toolbar-tools')
+                            h1
+                                span Home Automation
+                            span(flex)
+                            md-button(class="md-icon-button" aria-label="Settings" ng-click='close()')
+                                md-icon(md-font-icon="material-icons") menu
+                        ul(class="docs-menu")
+                            li(ng-repeat='section in sections' class="parent-list-item")
+                                md-icon(ng-if='section.icon' md-font-icon="material-icons") {{section.icon}}
+                                h2(class="md-subhead menu-heading" ng-if='section.type === "heading"') {{section.name}}
+                                menu-link(section="section" ng-if='section.type === "link"') {{section.name}}
+                                menu-toggle(section="section" ng-if='section.type === "toggle"') {{section.name}}
+                                ul
+                                    li(ng-repeat='subsection in section.children')
+                                        md-icon(ng-if='subsection.icon' md-font-icon="material-icons") {{subsection.icon}}
+                                        h2(ng-if='subsection.type === "heading"') {{subsection.name}}
+                                        menu-link(section="subsection" ng-if='subsection.type === "link"') {{subsection.name}}
+                                        menu-toggle(section="subsection" ng-if='subsection.type === "toggle"') {{subsection.name}}
 
-
-
-        h4 There are {{tasks.length}} tasks.
-        div(class='container')
-            div(id='task-list' class='row')
-                div(ng-repeat='task in tasks')
-                    p {{task.name}}
+                div
+                    md-content(ng-controller="mainController" flex layout-padding)
+                        div(layout-align="top center")
+                            md-list(flex)
+                                md-subheader(class='md-no-sticky') There are {{tasks.length}} tasks.
+                                md-list-item(class='md-1-line' ng-repeat='task in tasks' ng-click='toggleTask(task)')
+                                    p {{task.name}}
+                                    md-checkbox(class='md-secondary'  ng-model='task.done' aria-label='Toggle {{task.name}}')
