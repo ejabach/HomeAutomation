@@ -1,0 +1,18 @@
+<md-button class="md-button-toggle"
+           ng-click="toggle()"
+           aria-controls="docs-menu-{{section.name}}"
+           layout="row"
+           aria-expanded="{{isOpen()}}">
+
+    {{section.name}}
+    <md-icon aria-hidden="true" md-font-icon="material-icons" class="pull-right md-toggle-icon">
+        arrow_drop_down
+    </md-icon>
+
+</md-button>
+<ul ng-show="isOpen()" id="docs-menu-{{section.name}}" class="menu-toggle-list">
+    <li ng-repeat="page in section.children">
+        <menu-link section="page"></menu-link>
+    </li>
+</ul>
+
