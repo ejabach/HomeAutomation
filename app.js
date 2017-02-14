@@ -12,19 +12,17 @@ var authentication  = require('./libraries/jwtauth');
 var authorization   = require('./libraries/authorization');
 var config          = require('./config/config');
 
+var angularCli      = require('angular-cli');
+
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, '/templates'));
-app.set('view engine', 'pug');
-
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 
 //Require authentication if not running in development mode
