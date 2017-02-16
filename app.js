@@ -12,8 +12,6 @@ var authentication  = require('./libraries/jwtauth');
 var authorization   = require('./libraries/authorization');
 var config          = require('./config/config');
 
-var angularCli      = require('angular-cli');
-
 var app = express();
 
 // uncomment after placing your favicon in /public

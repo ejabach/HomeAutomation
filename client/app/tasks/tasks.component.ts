@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TasksService} from "./tasks.service";
+import {Task} from "./task";
 
 @Component({
   selector: 'task-list',
@@ -19,17 +20,14 @@ export class TasksComponent implements OnInit {
       );
   }
 
-  toggleTask(i) {
-    this.tasks[i] != this.tasks[i];
+  toggleTask(i: number) {
+    this.tasksService.toggleTask(this.tasks[i])
+      .subscribe(
+        task => this.tasks[i] = task
+      );
   }
 
   ngOnInit() {
     this.getTasks();
   }
-
-}
-
-export interface Task {
-  name: string;
-  done: boolean;
 }
