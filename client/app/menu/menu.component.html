@@ -1,3 +1,32 @@
-<p>
-  menu works!
-</p>
+<md-sidenav-container>
+  <md-sidenav #sidenav mode="side" opened="true" class="md-sidenav-side md-sidenav-opened">
+    <div *ngFor="let item of items">
+      <div *ngIf="item.isGroup()">
+        <h3>{{item.title}}</h3>
+        <div *ngFor="let child of item.children">
+          <span>
+            <button md-button>
+
+              <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
+              {{child.title}}
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="!item.isGroup()">
+          <button md-button (click)="redirect(item.ref)">
+            <span>
+            <md-icon>{{item.icon}}</md-icon>
+            {{item.title}}
+            </span>
+          </button>
+      </div>
+    </div>
+  </md-sidenav>
+  <div class="md-sidenav-content">
+    <p> main content </p>
+    <button (click)="sidenav.toggle()">Toggle SideNav</button>
+    <task-list></task-list>
+  </div>
+</md-sidenav-container>
