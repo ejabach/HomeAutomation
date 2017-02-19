@@ -10,7 +10,7 @@ export class MenuComponent implements OnInit {
   items: MenuItem[];
 
   constructor() {
-    let dashboard = new MenuItem('Dashboard', '/', 'assessment');
+    let dashboard = new MenuItem('Dashboard', '/dashboard', 'assessment');
     let rooms = new MenuItem('Rooms', '/rooms', 'home', [
       new MenuItem('Living Room', '/living'),
       new MenuItem('Bathroom', '/bath'),

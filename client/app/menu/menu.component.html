@@ -1,7 +1,14 @@
 
 <div fullscreen>
 <md-toolbar color="primary">
-  Home Automation
+  <span>
+    <button md-button>
+      <md-icon (click)="sidenav.toggle()">
+        menu
+      </md-icon>
+    </button>
+    Home Automation
+  </span>
 </md-toolbar>
 <md-sidenav-container >
 
@@ -10,7 +17,7 @@
       <div *ngIf="item.isGroup()" class="sidenav-item">
         <span>{{item.title}}</span>
         <div *ngFor="let child of item.children" class="sidenav-item">
-          <button md-button>
+          <button md-button routerLink="{{child.ref}}">
             <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
             {{child.title}}
           </button>
@@ -18,17 +25,16 @@
       </div>
 
       <div *ngIf="!item.isGroup()" class="sidenav-item">
-        <button md-button (click)="redirect(item.ref)">
+        <button md-button routerLink="{{item.ref}}">
           <md-icon>{{item.icon}}</md-icon>
           {{item.title}}
         </button>
       </div>
     </div>
   </md-sidenav>
-  <div class="md-sidenav-content" style="border: 2px;">
-    <p> main content </p>
-    <button (click)="sidenav.toggle()">Toggle SideNav</button>
-    <task-list></task-list>
+  <div class="md-sidenav-content">
+    <router-outlet>
+    </router-outlet>
   </div>
 </md-sidenav-container>
 </div>
