@@ -10,8 +10,17 @@ import {Task} from "./task";
 })
 export class TasksComponent implements OnInit {
   tasks: Task[];
+  newTask: Task;
 
   constructor(private tasksService: TasksService) { }
+
+  addNewTask() {
+    this.tasksService.addNewTask(this.newTask)
+      .subscribe(
+        task => task._id ? this.tasks.push(task) : null
+      );
+    this.newTask = new Task();
+  }
 
   getTasks() {
     this.tasksService.getTasks()
@@ -29,5 +38,6 @@ export class TasksComponent implements OnInit {
 
   ngOnInit() {
     this.getTasks();
+    this.newTask = new Task();
   }
 }

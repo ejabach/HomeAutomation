@@ -1,3 +1,40 @@
-* {
-  width: 100%;
+md-sidenav-container {
+  overflow: auto;
+}
+
+md-sidenav {
+  width: 200px;
+  background: #ECEFF1;
+}
+
+md-sidenav div.sidenav-item {
+  font-size: 24px;
+  max-width: 200px;
+  text-align: left;
+  vertical-align: center;
+  width: 200px;
+  margin: 0;
+  display: block;
+}
+md-sidenav div.sidenav-item button{
+  max-width: 200px;
+  text-align: left;
+  vertical-align: center;
+  width: 200px;
+}
+
+md-sidenav div.sidenav-group {
+  max-width: 200px;
+  text-align: center;
+  vertical-align: center;
+  width: 200px;
+}
+
+md-sidenav-container, md-sidenav {
+  display: flex;
+  overflow: visible;
+}
+
+.md-sidenav-content {
+  margin-left: 35px;
 }

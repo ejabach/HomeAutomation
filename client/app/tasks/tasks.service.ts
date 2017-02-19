@@ -9,6 +9,16 @@ export class TasksService {
 
   constructor(private http: Http) { }
 
+  addNewTask(task: Task): Observable<Task>
+  {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this.tasksUrl, {name: task.name}, options)
+      .map(this.extractTask)
+      .catch(this.handleError);
+  }
+
   getTasks(): Observable<Task[]>
   {
     return this.http.get(this.tasksUrl)
@@ -31,7 +41,7 @@ export class TasksService {
       _id: data._id,
       name: data.name,
       done: data.done
-    }
+    };
     return task;
   }
 

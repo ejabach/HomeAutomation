@@ -1,32 +1,34 @@
-<md-sidenav-container>
+
+<div fullscreen>
+<md-toolbar color="primary">
+  Home Automation
+</md-toolbar>
+<md-sidenav-container >
+
   <md-sidenav #sidenav mode="side" opened="true" class="md-sidenav-side md-sidenav-opened">
     <div *ngFor="let item of items">
-      <div *ngIf="item.isGroup()">
-        <h3>{{item.title}}</h3>
-        <div *ngFor="let child of item.children">
-          <span>
-            <button md-button>
-
-              <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
-              {{child.title}}
-            </button>
-          </span>
+      <div *ngIf="item.isGroup()" class="sidenav-item">
+        <span>{{item.title}}</span>
+        <div *ngFor="let child of item.children" class="sidenav-item">
+          <button md-button>
+            <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
+            {{child.title}}
+          </button>
         </div>
       </div>
 
-      <div *ngIf="!item.isGroup()">
-          <button md-button (click)="redirect(item.ref)">
-            <span>
-            <md-icon>{{item.icon}}</md-icon>
-            {{item.title}}
-            </span>
-          </button>
+      <div *ngIf="!item.isGroup()" class="sidenav-item">
+        <button md-button (click)="redirect(item.ref)">
+          <md-icon>{{item.icon}}</md-icon>
+          {{item.title}}
+        </button>
       </div>
     </div>
   </md-sidenav>
-  <div class="md-sidenav-content">
+  <div class="md-sidenav-content" style="border: 2px;">
     <p> main content </p>
     <button (click)="sidenav.toggle()">Toggle SideNav</button>
     <task-list></task-list>
   </div>
 </md-sidenav-container>
+</div>

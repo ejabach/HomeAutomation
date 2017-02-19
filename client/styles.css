@@ -1,21 +1,3 @@
 * {
   font-family: 'Roboto', sans-serif;
 }
-
-md-sidenav-container {
-  height: 100%;
-  overflow: auto;
-}
-
-md-sidenav-container md-sidenav {
-  max-width: 350px;
-}
-
-md-sidenav-container, md-sidenav {
-  display: flex;
-  overflow: visible;
-}
-
-.md-sidenav-content {
-  margin-left: 50px;
-}
