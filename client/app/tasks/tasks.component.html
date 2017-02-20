@@ -1,24 +1,29 @@
 <div>
   <md-card>
-    <md-card-title>
-      Task List
-    </md-card-title>
-    <form>
-      <table>
-        <tr *ngFor="let task of tasks; let i = index" (click)="toggleTask(i)">
+    <md-card-header>
+      <md-card-title>
+        Task List
+      </md-card-title>
+      <md-card-subtitle>
+        There are {{(tasks | tasksDone)?.length}} open tasks
+      </md-card-subtitle>
+    </md-card-header>
+    <md-divider></md-divider>
+    <md-card-content>
+      <md-list>
+        <md-list-item *ngFor="let task of tasks; let i = index" (click)="toggleTask(i)">
           <md-checkbox [checked]="task.done" [style.text-decoration]="task.done ? 'line-through' : ''">{{ task.name }}</md-checkbox>
-        </tr>
-        <tr>
-          <td>
-            <md-input-container>
-              <input mdInput [(ngModel)]="newTask.name" (keyup.enter)="addNewTask()" name="newTask.name" placeholder="Add new task">
-            </md-input-container>
-          </td>
-          <td>
-            <button md-button (click)="addNewTask()"><md-icon>add</md-icon></button>
-          </td>
-        </tr>
-      </table>
-    </form>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+    <md-divider></md-divider>
+    <md-card-actions>
+      <button md-button (click)="addNewTask()">
+        ADD
+      </button>
+      <button md-button (click)="cleanTasks()">
+        CLEAN
+      </button>
+    </md-card-actions>
   </md-card>
 </div>

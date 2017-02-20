@@ -15,6 +15,8 @@ import { DashboardComponent } from './content/dashboard/dashboard.component';
 import { UserComponent } from './content/user/user.component';
 import { SettingsComponent } from './content/settings/settings.component';
 import { PageNotFoundComponent } from './content/page-not-found/page-not-found.component';
+import { NewTaskDialogComponent } from './tasks/new-task-dialog/new-task-dialog.component';
+import { TasksDonePipe } from './tasks/tasks-done.pipe';
 
 const appRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
@@ -35,7 +37,12 @@ const appRoutes: Routes = [
     DashboardComponent,
     UserComponent,
     SettingsComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NewTaskDialogComponent,
+    TasksDonePipe
+  ],
+  entryComponents: [
+    NewTaskDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,7 @@
+<h1 md-dialog-title>Add Task</h1>
+<div md-dialog-actions>
+  <md-input-container>
+    <input mdInput placeholder="Task title" [(ngModel)]="newTaskTitle" (keyup.enter)="dialogRef.close(newTaskTitle)">
+  </md-input-container>
+  <button md-button (click)="dialogRef.close(newTaskTitle)">ADD</button>
+</div>

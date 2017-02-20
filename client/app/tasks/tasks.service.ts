@@ -19,6 +19,13 @@ export class TasksService {
       .catch(this.handleError);
   }
 
+  removeTask(task: Task): Observable<Task[]>
+  {
+    return this.http.delete(this.tasksUrl + task._id)
+      .map(this.extractTasks)
+      .catch(this.handleError)
+  }
+
   getTasks(): Observable<Task[]>
   {
     return this.http.get(this.tasksUrl)

@@ -2,7 +2,7 @@
 <div fullscreen>
 <md-toolbar color="primary">
   <span>
-    <button md-button>
+    <button md-button class="icon-button">
       <md-icon (click)="sidenav.toggle()">
         menu
       </md-icon>
@@ -10,8 +10,7 @@
     Home Automation
   </span>
 </md-toolbar>
-<md-sidenav-container >
-
+<md-sidenav-container>
   <md-sidenav #sidenav mode="side" opened="true" class="md-sidenav-side md-sidenav-opened">
     <div *ngFor="let item of items">
       <div *ngIf="item.isGroup()" class="sidenav-item">

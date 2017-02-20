@@ -112,9 +112,7 @@ app.delete('/api/tasks/:id', function (req, res, next) {
 Angular handles the frontend
  */
 app.get('*', function (req, res) {
-    res.render('index', {
-        title: 'Dashboard'
-    });
+    res.render('index');
 });
 
 // catch 404 and forward to error handler
