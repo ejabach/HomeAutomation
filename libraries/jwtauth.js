@@ -9,7 +9,7 @@ module.exports = function(req, res, next){
       try {
         var decoded = jwt.decode(token, config().secret);
         if (decoded.exp <= Date.now()) {
-          res.end('Access token has expired', 400);
+          res.end('Access token has expired', 403);
         }
         User.findOne({ _id: decoded.iss }, function(err, user) {
             if (!err){

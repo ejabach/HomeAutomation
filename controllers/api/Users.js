@@ -4,19 +4,25 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 
 /**
- * Handles all sockets requests 
+ * Handles all sockets requests
  */
 module.exports = BaseController.extend({
     auth: function(req, res) {
         User.findOne({username: req.body.username}, function(err, user){
             if (err || !user || !user.validatePassword(req.body.password)) {
-                console.log('err: ', err);
-                console.log('user', user);
-                console.log('validatePassword(): ', user.validatePassword(req.body.password));
+                console.error('Error during auth: ', err);
+                console.log('User:', user);
                 res.sendStatus(401);
+            } else {
+              if (!user.validatePassword(req.body.password))
+              {
+                console.log('Wrong PW!');
+                res.sendStatus(401);
+              } else {
+                var token = user.createToken();
+                res.json({username: user.username, token: token, isAdmin: user.admin});
+              }
             }
-            var token = user.createToken();            
-            res.json(token);
         });
     },
     create: function(req, res) {
@@ -36,7 +42,6 @@ module.exports = BaseController.extend({
                     _id: user._id,
                     username: user.username
                 });
-                res.sendStatus(200);
             } else {
                 console.error(err);
                 res.sendStatus(500);

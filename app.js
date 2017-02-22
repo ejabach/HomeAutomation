@@ -26,20 +26,19 @@ app.use(express.static(path.join(__dirname, 'dist')));
 //Require authentication if not running in development mode
 if (app.get('env') !== 'development') {
     console.log('Not running in development environment.');
-    app.all('/api/*', authentication);
 } else {
     console.log('Running in development environment.');
-    app.use(function(req, res, next){
-        console.log('Setting user');
-        req.user = {username: "testuser",
-            password:"",
-            admin: true,
-            isAdmin: function(){
-                return this.admin;
-            }
-        };
-        next();
-    });
+    // app.use(function(req, res, next){
+    //     console.log('Setting user');
+    //     req.user = {username: "testuser",
+    //         password:"",
+    //         admin: true,
+    //         isAdmin: function(){
+    //             return this.admin;
+    //         }
+    //     };
+    //     next();
+    // });
 }
 
 /********************
@@ -53,13 +52,13 @@ if (app.get('env') !== 'development') {
  *          POST - Create a new user
  *
  */
-app.get('/api/user', function(req, res, next){
+app.get('/api/user', authentication, function(req, res, next){
     api.users.show(req, res, next);
 });
 app.post('/api/user/auth', function(req, res, next){
     api.users.auth(req, res, next);
 });
-app.post('/api/user/create', authorization('create-user'), function(req, res, next){
+app.post('/api/user/create', authentication, function(req, res, next){
     api.users.create(req, res, next);
 });
 /*
@@ -72,39 +71,39 @@ app.post('/api/user/create', authorization('create-user'), function(req, res, ne
  *     /:name/toggle
  *          GET - Switches the socket given by :name
  */
-app.get('/api/sockets', function(req, res, next){
+app.get('/api/sockets', authentication, function(req, res, next){
     api.sockets.get(req, res, next);
 });
-app.get('/api/sockets/:name', function(req, res, next){
+app.get('/api/sockets/:name', authentication, function(req, res, next){
     api.sockets.show(req, res, next);
 });
-app.put('/api/sockets/:name/toggle', function (req, res, next) {
+app.put('/api/sockets/:name/toggle', authentication, function (req, res, next) {
     if (app.get('env') != 'development') {
         api.sockets.toggle(req, res, next);
     } else {
         console.log('Can\'t access sockets in development environment');
     }
 });
-app.post('/api/sockets' , function(req, res, next){
+app.post('/api/sockets', authentication , function(req, res, next){
     api.sockets.store(req, res, next);
 });
-app.put('/api/sockets/:id(\\d+)', function(req, res, next){
+app.put('/api/sockets/:id(\\d+)', authentication, function(req, res, next){
     api.sockets.update(req, res, next);
 });
 
 /*
 Task List
  */
-app.get('/api/tasks', function(req, res, next) {
+app.get('/api/tasks', authentication, function(req, res, next) {
     api.tasks.get(req, res, next);
 });
-app.post('/api/tasks', function (req, res, next) {
+app.post('/api/tasks', authentication, function (req, res, next) {
     api.tasks.store(req, res, next);
 });
-app.get('/api/tasks/:id/toggle', function (req, res, next) {
+app.get('/api/tasks/:id/toggle', authentication, function (req, res, next) {
     api.tasks.toggle(req, res, next);
 });
-app.delete('/api/tasks/:id', function (req, res, next) {
+app.delete('/api/tasks/:id', authentication, function (req, res, next) {
     api.tasks.delete(req, res, next);
 });
 
@@ -112,7 +111,8 @@ app.delete('/api/tasks/:id', function (req, res, next) {
 Angular handles the frontend
  */
 app.get('*', function (req, res) {
-    res.render('index');
+    console.log('Received other request than /api/\nRedirect to /');
+    res.redirect('/');
 });
 
 // catch 404 and forward to error handler

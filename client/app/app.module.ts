@@ -18,12 +18,17 @@ import { PageNotFoundComponent } from './content/page-not-found/page-not-found.c
 import { NewTaskDialogComponent } from './tasks/new-task-dialog/new-task-dialog.component';
 import { TasksDonePipe } from './tasks/tasks-done.pipe';
 import { LoginComponent } from './login/login.component';
+import { AuthGuardComponent as AuthGuard} from './authentication/auth-guard.component';
+import {AuthenticationService} from "./authentication/authentication.service";
+import {TasksService} from "./tasks/tasks.service";
 
 const appRoutes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'user', component: UserComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  { path: 'dashboard', canActivate: [AuthGuard], component: DashboardComponent },
+  { path: 'user', canActivate: [AuthGuard], component: UserComponent },
+  { path: 'settings', canActivate: [AuthGuard], component: SettingsComponent },
+  { path: 'login', component: LoginComponent },
+
+  { path: '', canActivate: [AuthGuard], redirectTo: 'dashboard', pathMatch: 'full'},
   { path: '**', component: PageNotFoundComponent}
 ];
 
@@ -42,7 +47,8 @@ const appRoutes: Routes = [
     NewTaskDialogComponent,
     TasksDonePipe,
     LoginComponent,
-    LoginComponent
+    LoginComponent,
+    AuthGuard
   ],
   entryComponents: [
     NewTaskDialogComponent
@@ -54,7 +60,10 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MaterialModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

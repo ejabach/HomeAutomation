@@ -3,15 +3,26 @@ import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {Task} from "./task";
 import {Observable} from "rxjs";
 
+import {AuthenticationService} from '../authentication/authentication.service';
+
 @Injectable()
 export class TasksService {
   private tasksUrl = 'api/tasks/';
+  private token: string;
 
-  constructor(private http: Http) { }
+  constructor(
+    private http: Http,
+    private authService: AuthenticationService
+  ) {
+    this.token = authService.user.token;
+  }
 
   addNewTask(task: Task): Observable<Task>
   {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
+    });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this.tasksUrl, {name: task.name}, options)
@@ -21,21 +32,39 @@ export class TasksService {
 
   removeTask(task: Task): Observable<Task[]>
   {
-    return this.http.delete(this.tasksUrl + task._id)
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
+    });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this.tasksUrl + task._id, options)
       .map(this.extractTasks)
       .catch(this.handleError)
   }
 
   getTasks(): Observable<Task[]>
   {
-    return this.http.get(this.tasksUrl)
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
+    });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.get(this.tasksUrl, options)
       .map(this.extractTasks)
       .catch(this.handleError)
   }
 
   toggleTask(task: Task): Observable<Task>
   {
-    return this.http.get(this.tasksUrl + task._id + '/toggle')
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': this.token
+    });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.get(this.tasksUrl + task._id + '/toggle', options)
       .map(this.extractTask)
       .catch(this.handleError);
   }

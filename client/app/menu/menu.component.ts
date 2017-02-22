@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MenuItem} from "./menu-item";
+import {AuthenticationService} from "../authentication/authentication.service";
+import {User} from "../authentication/user";
 
 @Component({
   selector: 'menu-container',
@@ -9,20 +11,22 @@ import {MenuItem} from "./menu-item";
 export class MenuComponent implements OnInit {
   items: MenuItem[];
 
-  constructor() {
+  constructor(
+    private authService: AuthenticationService
+  ) {
     let dashboard = new MenuItem('Dashboard', '/dashboard', 'assessment');
     let rooms = new MenuItem('Rooms', '/rooms', 'home', [
       new MenuItem('Living Room', '/living'),
       new MenuItem('Bathroom', '/bath'),
     ]);
-    let user = new MenuItem(this.getUserName(), '/user', 'person');
+    let user = new MenuItem('Hardcoded User', '/user', 'person');
 
     this.items = [dashboard, rooms, user];
   }
 
-  getUserName()
+  loggedIn()
   {
-    return 'Jan';
+    return this.authService.isLoggedIn();
   }
 
   redirect(ref: string)

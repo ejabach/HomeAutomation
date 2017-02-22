@@ -1,39 +1,38 @@
-
 <div fullscreen>
-<md-toolbar color="primary">
+  <md-toolbar color="primary">
   <span>
-    <button md-button class="icon-button">
+    <button md-mini-fab color="primary" class="icon-button">
       <md-icon (click)="sidenav.toggle()">
         menu
       </md-icon>
     </button>
     Home Automation
   </span>
-</md-toolbar>
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="side" opened="true" class="md-sidenav-side md-sidenav-opened">
-    <div *ngFor="let item of items">
-      <div *ngIf="item.isGroup()" class="sidenav-item">
-        <span>{{item.title}}</span>
-        <div *ngFor="let child of item.children" class="sidenav-item">
-          <button md-button routerLink="{{child.ref}}">
-            <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
-            {{child.title}}
+  </md-toolbar>
+  <md-sidenav-container>
+    <md-sidenav #sidenav mode="side" opened="true" *ngIf="loggedIn()" class="md-sidenav-side md-sidenav-opened">
+      <div *ngFor="let item of items">
+        <div *ngIf="item.isGroup()" class="sidenav-item">
+          <span>{{item.title}}</span>
+          <div *ngFor="let child of item.children" class="sidenav-item">
+            <button md-button routerLink="{{child.ref}}">
+              <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
+              {{child.title}}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="!item.isGroup()" class="sidenav-item">
+          <button md-button routerLink="{{item.ref}}">
+            <md-icon>{{item.icon}}</md-icon>
+            {{item.title}}
           </button>
         </div>
       </div>
-
-      <div *ngIf="!item.isGroup()" class="sidenav-item">
-        <button md-button routerLink="{{item.ref}}">
-          <md-icon>{{item.icon}}</md-icon>
-          {{item.title}}
-        </button>
-      </div>
+    </md-sidenav>
+    <div class="md-sidenav-content">
+      <router-outlet>
+      </router-outlet>
     </div>
-  </md-sidenav>
-  <div class="md-sidenav-content">
-    <router-outlet>
-    </router-outlet>
-  </div>
-</md-sidenav-container>
+  </md-sidenav-container>
 </div>

@@ -1,8 +1,20 @@
 <h1>Login</h1>
 <form>
-  <md-input-container>
-    <input mdInput placeholder="User">
-    <input mdInput placeholder="Password">
-    <button md-button-raised (click)="loginAttempt()">Login</button>
-  </md-input-container>
+  <table>
+    <tr>
+      <md-input-container>
+        <input mdInput [(ngModel)]="username" name="username" placeholder="User">
+      </md-input-container>
+    </tr>
+    <tr>
+      <md-input-container>
+        <input mdInput [(ngModel)]="password" name="password" type="password" placeholder="Password">
+      </md-input-container>
+    </tr>
+    <tr *ngIf="loginFailed">
+      <p color="warn">Username or password wrong.</p>
+    </tr>
+  </table>
+
+  <button md-raised-button (click)="loginAttempt()">LOGIN</button>
 </form>
