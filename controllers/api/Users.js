@@ -31,22 +31,28 @@ module.exports = BaseController.extend({
         var password = req.body.password;
         console.log('Username: ', username);
         console.log('PW: ', password);
-        var user = new User({username: username,
+        if (username && password)
+        {
+          var user = new User({username: username,
             password: password,
             admin: false});
-        console.log('User after PW: ', user);
-        user.save(function(err, user){
+          console.log('User after PW: ', user);
+          user.save(function(err, user){
             if (!err) {
-                console.log('User saved.');
-                res.json({
-                    _id: user._id,
-                    username: user.username
-                });
+              console.log('User saved.');
+              res.json({
+                _id: user._id,
+                username: user.username
+              });
             } else {
-                console.error(err);
-                res.sendStatus(500);
+              console.error(err);
+              res.sendStatus(500);
             }
-        });
+          });
+        } else {
+          console.error('Username or password not set');
+          res.sendStatus(400);
+        }
     },
     show: function(req, res) {
         console.log('Show all users request.');
