@@ -39,3 +39,7 @@ md-sidenav-container, md-sidenav {
 .md-sidenav-content {
   margin: 20px;
 }
+
+span.spacer {
+  flex: 1 1 auto;
+}

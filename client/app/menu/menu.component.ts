@@ -10,6 +10,7 @@ import {User} from "../authentication/user";
 })
 export class MenuComponent implements OnInit {
   items: MenuItem[];
+  username: String;
 
   constructor(
     private authService: AuthenticationService
@@ -35,6 +36,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.username = this.authService.user.username;
   }
 
 }
