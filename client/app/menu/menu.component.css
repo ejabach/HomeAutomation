@@ -8,25 +8,26 @@ md-sidenav {
   background: #ECEFF1;
 }
 
-md-sidenav div.sidenav-item {
-  font-size: 20px;
+div.sidenav-item {
   max-width: 200px;
   text-align: left;
   vertical-align: center;
   width: 200px;
   margin: 0;
   display: block;
+  height: 50px;
 }
-md-sidenav div.sidenav-item button{
-  max-width: 200px;
-  text-align: left;
-  vertical-align: center;
+
+div.sidenav-item button {
   width: 200px;
+  height: 50px;
+  font-size: 16px;
+  text-align: left;
 }
 
 md-sidenav div.sidenav-group {
   max-width: 200px;
-  text-align: center;
+  text-align: left;
   vertical-align: center;
   width: 200px;
 }

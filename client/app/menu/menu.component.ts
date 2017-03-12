@@ -20,7 +20,7 @@ export class MenuComponent implements OnInit {
       new MenuItem('Living Room', '/living'),
       new MenuItem('Bathroom', '/bath'),
     ]);
-    let user = new MenuItem('Hardcoded User', '/user', 'person');
+    let user = new MenuItem('Settings', '/settings', 'settings');
 
     this.items = [dashboard, rooms, user];
   }
@@ -30,9 +30,9 @@ export class MenuComponent implements OnInit {
     return this.authService.isLoggedIn();
   }
 
-  redirect(ref: string)
+  logout()
   {
-    console.log('Redirecting to', ref);
+    this.authService.logout();
   }
 
   ngOnInit() {
