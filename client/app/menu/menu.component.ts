@@ -27,7 +27,12 @@ export class MenuComponent implements OnInit {
 
   loggedIn()
   {
-    return this.authService.isLoggedIn();
+    if (this.authService.isLoggedIn())
+    {
+      this.username = this.authService.user.username;
+      return true;
+    }
+    return false;
   }
 
   logout()
@@ -36,7 +41,9 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.username = this.authService.user.username;
+    if (this.loggedIn()) {
+      this.username = this.authService.user.username;
+    }
   }
 
 }

@@ -11,7 +11,7 @@
     </span>
   </span>
   <span class="spacer"></span>
-  <span>
+  <span *ngIf="loggedIn()">
     <button md-button [mdMenuTriggerFor]="menu">
       <md-icon>
         person
@@ -26,7 +26,7 @@
           Settings
         </span>
       </button>
-      <button md-menu-item (click)="logout()" routerLink="/">
+      <button md-menu-item (click)="logout()" routerLink="/login">
         <span>
           Logout
         </span>
