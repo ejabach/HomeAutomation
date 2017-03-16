@@ -6,20 +6,47 @@
         menu
       </md-icon>
     </button>
-    Home Automation
+    <span>
+      Home Automation
+    </span>
+  </span>
+  <span class="spacer"></span>
+  <span *ngIf="loggedIn()">
+    <button md-button [mdMenuTriggerFor]="menu">
+      <md-icon>
+        person
+      </md-icon>
+      <span>
+        {{username}}
+      </span>
+    </button>
+    <md-menu #menu="mdMenu">
+      <button md-menu-item routerLink="/settings">
+        <span>
+          Settings
+        </span>
+      </button>
+      <button md-menu-item (click)="logout()" routerLink="/login">
+        <span>
+          Logout
+        </span>
+      </button>
+    </md-menu>
   </span>
   </md-toolbar>
   <md-sidenav-container>
     <md-sidenav #sidenav mode="side" opened="true" *ngIf="loggedIn()" class="md-sidenav-side md-sidenav-opened">
       <div *ngFor="let item of items">
-        <div *ngIf="item.isGroup()" class="sidenav-item">
+        <div *ngIf="item.isGroup()" class="sidenav-group">
           <span>{{item.title}}</span>
+          <md-divider></md-divider>
           <div *ngFor="let child of item.children" class="sidenav-item">
             <button md-button routerLink="{{child.ref}}">
-              <i *ngIf="child.icon" class="material-icons pull-left">{{child.icon}}</i>
+              <md-icon>{{child.icon}}</md-icon>
               {{child.title}}
             </button>
           </div>
+          <md-divider></md-divider>
         </div>
 
         <div *ngIf="!item.isGroup()" class="sidenav-item">

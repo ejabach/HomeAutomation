@@ -18,7 +18,7 @@ var userSchema = db.Schema({
 userSchema.methods.validatePassword = function(password){
     console.log('ValidatePW() called');
     return bcrypt.compareSync(password, this.password);
-}
+};
 userSchema.methods.createToken = function(){
     console.log('CreateToken() called');
     var expires = moment().add('days', 1).valueOf();
@@ -27,11 +27,11 @@ userSchema.methods.createToken = function(){
         exp: expires
     }, config().secret);
     return token;
-}
+};
 userSchema.methods.isAdmin = function(){
     console.log('isAdmin() called');
     return this.admin;
-}
+};
 var User = db.connection.model('User', userSchema);
 
 module.exports = User;

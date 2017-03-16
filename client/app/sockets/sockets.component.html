@@ -1,3 +1,23 @@
-<p>
-  sockets works!
-</p>
+<div>
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        Sockets
+      </md-card-title>
+      <md-card-subtitle>
+        There are {{ sockets?.length }} sockets.
+      </md-card-subtitle>
+    </md-card-header>
+    <md-divider></md-divider>
+    <md-card-content>
+      <md-list>
+        <md-list-item *ngFor="let socket of sockets; let i = index">
+          <md-icon md-list-avatar>power</md-icon>
+          <h4 md-line>{{socket.name}}</h4>
+          <p md-line>{{socket.numbering}}</p>
+          <md-slide-toggle (click)="toggleSocket(i)" [checked]="socket.status"></md-slide-toggle>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+  </md-card>
+</div>

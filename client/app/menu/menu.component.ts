@@ -10,6 +10,7 @@ import {User} from "../authentication/user";
 })
 export class MenuComponent implements OnInit {
   items: MenuItem[];
+  username: String;
 
   constructor(
     private authService: AuthenticationService
@@ -19,22 +20,30 @@ export class MenuComponent implements OnInit {
       new MenuItem('Living Room', '/living'),
       new MenuItem('Bathroom', '/bath'),
     ]);
-    let user = new MenuItem('Hardcoded User', '/user', 'person');
+    let user = new MenuItem('Settings', '/settings', 'settings');
 
     this.items = [dashboard, rooms, user];
   }
 
   loggedIn()
   {
-    return this.authService.isLoggedIn();
+    if (this.authService.isLoggedIn())
+    {
+      this.username = this.authService.user.username;
+      return true;
+    }
+    return false;
   }
 
-  redirect(ref: string)
+  logout()
   {
-    console.log('Redirecting to', ref);
+    this.authService.logout();
   }
 
   ngOnInit() {
+    if (this.loggedIn()) {
+      this.username = this.authService.user.username;
+    }
   }
 
 }
