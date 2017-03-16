@@ -5,7 +5,7 @@ var config = {
         mongo:{
             host: 'localhost'
         },
-        secret: 'supersecret'        
+        secret: 'supersecret'
     },
     staging: {
         mode: 'staging',
@@ -23,7 +23,7 @@ var config = {
         },
         secret: 'supersecret'
     }
-}
+};
 
 module.exports = function(mode){
 	return config[mode || process.argv[2] || 'local'] || config.local;
