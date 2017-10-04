@@ -11,6 +11,8 @@ var api             = require('./controllers/api/API');
 var authentication  = require('./libraries/jwtauth');
 var authorization   = require('./libraries/authorization');
 var config          = require('./config/config');
+var mqttController  = require('./controllers/api/MQTTController');
+
 
 var app = express();
 
@@ -21,7 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/api', mqttController);
 
+// Initialize all API modules
+api.init();
 
 //Require authentication if not running in development mode
 if (app.get('env') !== 'development') {
